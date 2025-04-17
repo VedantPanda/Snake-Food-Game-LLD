@@ -2,27 +2,57 @@ package main.entities;
 
 public class SnakeBoard {
 
-    private final int size;
+    private final int width;
 
-    private int gameScore;
+    private final int height;
 
-//    private final SnakeFoodVO[][] board;
+    private final Snake snake;
 
-    public SnakeBoard(int size) {
-        this.size = size;
-//        board = new SnakeFoodVO[size][size];
-        gameScore = 0;
+    private final Food food;
+
+    public SnakeBoard(int width, int height) {
+        this.width = width;
+        this.height = height;
+        snake = new Snake();
+        food = new Food();
     }
 
-    public boolean isGameOver(){
-        return true;
+    public Snake getSnake() {
+        return snake;
     }
 
-    public boolean move(){
-        if(isGameOver()){
+    private boolean isGameOver(Cell cell){
+        return checkCollidingWithBoundary(cell) || checkCollidesWithItself(cell);
+    }
+
+    private boolean checkCollidesWithItself(Cell cell) {
+        return snake.getSnakePositionSet().contains(cell);
+    }
+
+    private boolean checkCollidingWithBoundary(Cell cell) {
+        return cell.getRow()>=0 && cell.getRow()<height && cell.getCol()>=0 && cell.getCol()<width;
+    }
+
+    private boolean cellContainsFood(Cell cell) {
+        return !food.getFoodPositions().isEmpty() && cell.equals(food.getFoodPositions().peek());
+    }
+
+    public boolean move(int row, int col){
+        Cell cell = new Cell(row, col);
+        if(isGameOver(cell)){
             return true;
         }
-        //update stuff
+        if(!cellContainsFood(cell)){
+            Cell snakesTail = snake.getSnakeDeque().removeLast();
+            snake.getSnakePositionSet().remove(snakesTail);
+        }
+        else{
+            if(!food.getFoodPositions().isEmpty()){
+                food.getFoodPositions().poll();
+            }
+        }
+        snake.getSnakeDeque().addFirst(cell);
+        snake.getSnakePositionSet().add(cell);
         return false;
     }
 

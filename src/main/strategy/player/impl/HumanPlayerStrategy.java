@@ -17,7 +17,7 @@ public class HumanPlayerStrategy implements PlayerStrategy {
     private final SnakeBoard snakeBoard;
 
     public HumanPlayerStrategy() {
-        snakeBoard = new SnakeBoard(5);
+        snakeBoard = new SnakeBoard(5, 5);
         invoker = new Invoker();
         scanner = new Scanner(System.in);
     }
@@ -38,10 +38,12 @@ public class HumanPlayerStrategy implements PlayerStrategy {
             }
         }
         announceResult();
+        scanner.close();
     }
 
     private void announceResult() {
-        //display the length of the snake and the score of the game
+        int score = snakeBoard.getSnake().getSnakeDeque().size()-1;
+        System.out.println("Your final score is "+score);
     }
 
 }
