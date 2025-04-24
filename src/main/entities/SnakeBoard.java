@@ -10,11 +10,24 @@ public class SnakeBoard {
 
     private final Food food;
 
-    public SnakeBoard(int width, int height) {
+    private static volatile SnakeBoard snakeBoardInstance;
+
+    private SnakeBoard(int width, int height) {
         this.width = width;
         this.height = height;
         snake = new Snake();
         food = new Food();
+    }
+
+    public static SnakeBoard getSnakeBoardInstance(int width, int height) {
+        if(snakeBoardInstance==null) {
+            synchronized (SnakeBoard.class) {
+                if(snakeBoardInstance==null) {
+                    snakeBoardInstance = new SnakeBoard(width, height);
+                }
+            }
+        }
+        return snakeBoardInstance;
     }
 
     public Snake getSnake() {

@@ -15,7 +15,7 @@ public class SnakeGame implements BoardGames {
 
     public SnakeGame() {
         player = new Player("Alex", PlayerStrategyFactory.getPlayerStrategy("Human"));
-        snakeBoard = new SnakeBoard(5, 5);
+        snakeBoard = SnakeBoard.getSnakeBoardInstance(5, 5);
         invoker = new Invoker();
     }
 
